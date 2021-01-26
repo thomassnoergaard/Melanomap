@@ -46,5 +46,5 @@ else:
     else:
         st.write("Inconclusive")
     
-    st.text("Probability (0: Non-cancerous, 1: Melanoma)")
+    st.text("Probability (0: Non-cancerous, 0.3 - 0.7: Inconclusive , 1: Melanoma)")
     st.write(prediction)
