@@ -1,18 +1,19 @@
-import cv2
+from cv2 import cv2
 from PIL import Image, ImageOps
 import numpy as np
 import tensorflow as tf
 import streamlit as st
+import os
 
-model = tf.keras.models.load_model('model_VGG16.hdf5')
+model = tf.keras.models.load_model('model_VGG16_new.hdf5')
 
-
+os.environ['KMP_DUPLICATE_LIB_OK']='TRUE'
 
 st.write("""
          # Melanoma Prediction
          """
          )
-st.write("This is a simple image classification web app to predict whether a mole is cancerous")
+st.write("This is a simple image classification web app to predict whether a skin lesion is cancerous")
 file = st.file_uploader("Please upload an image file", type=["jpg", "png"])
 
 
@@ -24,7 +25,7 @@ def import_and_predict(image_data, model):
         image = ImageOps.fit(image_data, size, Image.ANTIALIAS)
         image = np.asarray(image)
         img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        img_resize = (cv2.resize(img, dsize=(75, 75),    interpolation=cv2.INTER_CUBIC))/255.
+        img_resize = (cv2.resize(img, dsize=(150, 150),    interpolation=cv2.INTER_CUBIC))/255.
         
         img_reshape = img_resize[np.newaxis,...]
     
@@ -39,11 +40,11 @@ else:
     prediction = import_and_predict(image, model)
     
     if np.argmax(prediction) == 0:
-        st.write("Non-cancerous")
+        st.write("")
     elif np.argmax(prediction) == 1:
-        st.write("Melanoma")
+        st.write("")
     else:
         st.write("Inconclusive")
     
-    st.text("Probability (0: Non-cancerous, 1: Melanoma, 2: Inoconclusive")
+    st.text("Probability (0: Non-cancerous, 1: Melanoma)")
     st.write(prediction)
